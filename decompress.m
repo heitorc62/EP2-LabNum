@@ -22,15 +22,34 @@
 ## Author: Heitor <heitor@pop-os>
 ## Created: 2022-05-28
 
-function retval = decompress (compressedImg, method, k, h)
+function retval = decompress (compressedImg, k)
     n = size(compressedImg, 2);
     p = n + ((n - 1) * k);  
     D = zeros(p, p, 3);
+    D = D - 1;
     for i=0:n-1
       for j=0:n-1 
-        originalImg(i*(k + 1) + 1, j*(k + 1) + 1, :) = N(i+1, j+1, :);
+        D(i*(k + 1) + 1, j*(k + 1) + 1, :) = compressedImg(i+1, j+1, :);
       endfor
     endfor
-     
+    
+    
+    for q=1:k+1
+      aux = 0
+      for i=0:1
+        for j=0:1
+          elemento = D(i*(k + 1) + 1, j*(k + 1) + 1);
+        
+        endfor
+      endfor
+    endfor
+    
+    
+    
+    
+    
+    retval = D;
+
+   
 
 endfunction
