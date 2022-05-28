@@ -22,7 +22,7 @@
 ## Author: Heitor <heitor@pop-os>
 ## Created: 2022-05-28
 
-function retval = decompress (compressedImg, k)
+function retval = decompress (compressedImg, k, h)
     n = size(compressedImg, 2);
     p = n + ((n - 1) * k);  
     D = zeros(p, p, 3);
@@ -33,21 +33,43 @@ function retval = decompress (compressedImg, k)
       endfor
     endfor
     
+    A = [1 0 0 0; 1 0 h 0; 1 h 0 0; 1 h h (h*h)];
+    A = [1 0 0 0; 1 0 h 0; 1 h 0 0; 1 h h (h*h)];
     
-    for q=1:k+1
-      aux = 0
-      for i=0:1
-        for j=0:1
-          elemento = D(i*(k + 1) + 1, j*(k + 1) + 1);
-        
+    B = zeros(4, 1, 3);
+    for I=0:n-2
+      for J=0:n-2
+        for i=0:1
+          for j=0:1
+            B(i*2 + j + 1, :) = D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :);
+          endfor
+        endfor
+        aux = B(2, :);
+        B(2, :) = B(4, :);
+        B(4, :) = aux;
+        aux = B(1, :);
+        B(1, :) = B(3, :);
+        B(3, :) = aux;
+        B
+        C = A\B
+        C(1)
+        C(2)
+        C(3)
+        C(4)
+        for p=0:k+1
+          for q=0:k+1
+            if D(I*(k + 1) + p + 1, J*(k + 1) + q + 1) == -1
+              auxX = I*(k + 1) + p + 1;
+              auxY = J*(k + 1) + q + 1;
+              x = (h/k+1)*(k + 1 - q);
+              y = (h/k+1)*p;
+              D(auxX, auxY, :) = C(1) + C(2)*x + C(3)*y + C(4)*x*y;
+            endif
+          endfor
         endfor
       endfor
     endfor
-    
-    
-    
-    
-    
+    imwrite(uint8(D), "decompressed.png"); 
     retval = D;
 
    
