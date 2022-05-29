@@ -52,12 +52,12 @@ function retval = decompress (compressedImg, method, k, h)
           B(3, :) = aux;
           #B
           C = A\B;
-          for p=0:k+1
+          for l=0:k+1
             for q=0:k+1
-              if D(I*(k + 1) + p + 1, J*(k + 1) + q + 1) == -1
-                auxX = I*(k + 1) + p + 1;
+              if D(I*(k + 1) + l + 1, J*(k + 1) + q + 1) == -1
+                auxX = I*(k + 1) + l + 1;
                 auxY = J*(k + 1) + q + 1;
-                x = (h/(k+1))*(k + 1 - p);
+                x = (h/(k+1))*(k + 1 - l);
                 y = (h/(k+1))*q;
                 #disp("D("), disp(auxX), disp(", "), disp(auxY), disp(") = "), disp(D(I*(k + 1) + p + 1, J*(k + 1) + q + 1));
                 D(auxX, auxY, 1) = C(1) + C(2)*x + C(3)*y + C(4)*x*y;
@@ -82,10 +82,10 @@ function retval = decompress (compressedImg, method, k, h)
             for L=0:1
               for i=0:1
                 for j=0:1
-                  if (T == 0 & L == 0)
+                  if (T == 0 && L == 0)
                     #f
                     B(T*2 + i + 1, L*2 + j + 1, :) = D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :);
-                  elseif (T == 0 & L == 1)
+                  elseif (T == 0 && L == 1)
                     #delf dely
                     if(J*(k + 1) + j*(k + 1) + 1 == p)
                       B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
@@ -94,7 +94,7 @@ function retval = decompress (compressedImg, method, k, h)
                     else
                       B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
                     endif
-                  elseif (T == 1 & L == 0)
+                  elseif (T == 1 && L == 0)
                     #delf delx
                     if(I*(k + 1) + i*(k + 1) + 1 == p)
                       B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
@@ -102,6 +102,7 @@ function retval = decompress (compressedImg, method, k, h)
                       B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
                     else
                       B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/(2*h);
+                    endif
                   else
                     #del2f delx dely
                     #calcular del delx de del dely
@@ -142,26 +143,44 @@ function retval = decompress (compressedImg, method, k, h)
                         d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
                         d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
                       endif                       
-                    B(T*2 + i + 1, L*2 + j + 1, :) = (d1 - d2)/(2*h)
+                    B(T*2 + i + 1, L*2 + j + 1, :) = (d1 - d2)/(2*h);
                     endif
                   endif
                 endfor
               endfor
             endfor
           endfor
+          #disp("A matriz B é igual a: ");
           #B
-          C = A\B;
-          for p=0:k+1
+          for z=0:1
+            for g=0:1
+              aux2 = B(z*2 + 1, g*2 + 1, :);
+              B(z*2 + 1, g*2 + 1, :) = B(z*2 + 2, g*2 + 1, :);
+              B(z*2 + 2, g*2 + 1, :) = aux2;
+              aux2 = B(z*2 + 2, g*2 + 2, :);
+              B(z*2 + 2, g*2 + 2, :) = B(z*2 + 1, g*2 + 2, :);
+              B(z*2 + 1, g*2 + 2, :) = aux2;
+            endfor
+          endfor
+          #B
+          C1 = B(:,:,1)*inv(A)*inv(A');
+          C2 = B(:,:,2)*inv(A)*inv(A');
+          C3 = B(:,:,3)*inv(A)*inv(A');
+          
+          for l=0:k+1
             for q=0:k+1
-              if D(I*(k + 1) + p + 1, J*(k + 1) + q + 1) == -1
-                auxX = I*(k + 1) + p + 1;
+              if D(I*(k + 1) + l + 1, J*(k + 1) + q + 1) == -1
+                auxX = I*(k + 1) + l + 1;
                 auxY = J*(k + 1) + q + 1;
-                x = (h/(k+1))*(k + 1 - p);
+                x = (h/(k+1))*(k + 1 - l);
                 y = (h/(k+1))*q;
                 #disp("D("), disp(auxX), disp(", "), disp(auxY), disp(") = "), disp(D(I*(k + 1) + p + 1, J*(k + 1) + q + 1));
-                D(auxX, auxY, 1) = C(1) + C(2)*x + C(3)*y + C(4)*x*y;
-                D(auxX, auxY, 2) = C(5) + C(6)*x + C(7)*y + C(8)*x*y;
-                D(auxX, auxY, 3) = C(9) + C(10)*x + C(11)*y + C(12)*x*y;
+                #D(auxX, auxY, 1) = C(1) + C(2)*x + C(3)*y + C(4)*x*y;
+                #D(auxX, auxY, 2) = C(5) + C(6)*x + C(7)*y + C(8)*x*y;
+                #D(auxX, auxY, 3) = C(9) + C(10)*x + C(11)*y + C(12)*x*y;
+                D(auxX, auxY, 1) = [1 x x**2 x**3]*C1*[1; y; y**2; y**3];
+                D(auxX, auxY, 2) = [1 x x**2 x**3]*C2*[1; y; y**2; y**3];
+                D(auxX, auxY, 3) = [1 x x**2 x**3]*C3*[1; y; y**2; y**3];
               endif
             endfor
           endfor
@@ -170,7 +189,9 @@ function retval = decompress (compressedImg, method, k, h)
       
     endif
     imwrite(uint8(D), "decompressed.png"); 
+    disp("oi")
     retval = D;
+    
 
    
 
