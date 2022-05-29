@@ -68,8 +68,113 @@ function retval = decompress (compressedImg, method, k, h)
           endfor
         endfor
       endfor
+      
+      
+      
+      
+      
     else
-      A = [1 0 0 0; 1 h (h*h) (h*h*h); 0 1 0 0; 0 1 (2*h) (3*h*h)]; 
+      A = [1 0 0 0; 1 h (h*h) (h*h*h); 0 1 0 0; 0 1 (2*h) (3*h*h)];
+      B = zeros(4, 4, 3);
+      for I=0:n-2
+        for J=0:n-2
+          for T=0:1
+            for L=0:1
+              for i=0:1
+                for j=0:1
+                  if (T == 0 & L == 0)
+                    #f
+                    B(T*2 + i + 1, L*2 + j + 1, :) = D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :);
+                  elseif (T == 0 & L == 1)
+                    #delf dely
+                    if(J*(k + 1) + j*(k + 1) + 1 == p)
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                    elseif(J*(k + 1) + j*(k + 1) + 1 == 1)
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                    else
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                    endif
+                  elseif (T == 1 & L == 0)
+                    #delf delx
+                    if(I*(k + 1) + i*(k + 1) + 1 == p)
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                    elseif(I*(k + 1) + i*(k + 1) + 1 == 1)
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                    else
+                      B(T*2 + i + 1, L*2 + j + 1, :) = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/(2*h);
+                  else
+                    #del2f delx dely
+                    #calcular del delx de del dely
+                    if(I*(k + 1) + i*(k + 1) + 1 == p)
+                      #delf dely(xi, yj) - delf dely(x_{i-1}, yj) /h
+                      #vamos calcular delf dely(xi, yj)
+                      if(J*(k + 1) + j*(k + 1) + 1 == p)
+                        d1 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                      elseif(J*(k + 1) + j*(k + 1) + 1 == 1)
+                        d1 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                      else
+                        d1 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                      endif                    
+                    elseif(I*(k + 1) + i*(k + 1) + 1 == 1)
+                    #vamos calcular dely(x_{i+1}, yj) - delf dely(x_i, yj) /h
+                      if(J*(k + 1) + j*(k + 1) + 1 == p)
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                      elseif(J*(k + 1) + j*(k + 1) + 1 == 1)
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                      else
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                        d2 = (D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + i*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                      endif                                        
+                    else
+                    #vamos calcular dely(x_{i+1}, yj) - delf dely(x_{i-1}, yj) / 2h
+                      if(J*(k + 1) + j*(k + 1) + 1 == p)
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/h;
+                      elseif(J*(k + 1) + j*(k + 1) + 1 == 1)
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + j*(k + 1) + 1, :))/h;
+                      else
+                        d1 = (D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i + 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                        d2 = (D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j + 1)*(k + 1) + 1, :) - D(I*(k + 1) + (i - 1)*(k + 1) + 1, J*(k + 1) + (j - 1)*(k + 1) + 1, :))/(2*h);
+                      endif                       
+                    B(T*2 + i + 1, L*2 + j + 1, :) = (d1 - d2)/(2*h)
+                    endif
+                  endif
+                endfor
+              endfor
+            endfor
+          endfor
+          
+          aux = B(2, :);
+          B(2, :) = B(4, :);
+          B(4, :) = aux;
+          aux = B(1, :);
+          B(1, :) = B(3, :);
+          B(3, :) = aux;
+          #B
+          C = A\B;
+          for p=0:k+1
+            for q=0:k+1
+              if D(I*(k + 1) + p + 1, J*(k + 1) + q + 1) == -1
+                auxX = I*(k + 1) + p + 1;
+                auxY = J*(k + 1) + q + 1;
+                x = (h/(k+1))*(k + 1 - p);
+                y = (h/(k+1))*q;
+                #disp("D("), disp(auxX), disp(", "), disp(auxY), disp(") = "), disp(D(I*(k + 1) + p + 1, J*(k + 1) + q + 1));
+                D(auxX, auxY, 1) = C(1) + C(2)*x + C(3)*y + C(4)*x*y;
+                D(auxX, auxY, 2) = C(5) + C(6)*x + C(7)*y + C(8)*x*y;
+                D(auxX, auxY, 3) = C(9) + C(10)*x + C(11)*y + C(12)*x*y;
+              endif
+            endfor
+          endfor
+        endfor
+      endfor
+      
     endif
     imwrite(uint8(D), "decompressed.png"); 
     retval = D;
