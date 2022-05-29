@@ -149,13 +149,6 @@ function retval = decompress (compressedImg, method, k, h)
               endfor
             endfor
           endfor
-          
-          aux = B(2, :);
-          B(2, :) = B(4, :);
-          B(4, :) = aux;
-          aux = B(1, :);
-          B(1, :) = B(3, :);
-          B(3, :) = aux;
           #B
           C = A\B;
           for p=0:k+1
