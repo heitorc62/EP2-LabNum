@@ -14,19 +14,24 @@
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {} {@var{retval} =} calculateError (@var{input1}, @var{input2})
+## @deftypefn {} {@var{retval} =} func1 (@var{input1}, @var{input2})
 ##
 ## @seealso{}
 ## @end deftypefn
 
 ## Author: Heitor <heitor@pop-os>
-## Created: 2022-05-29
+## Created: 2022-05-30
 
-function retval = calculateError (originalImg, decompressedImg)
-  errR = norm(double(vec(originalImg(:, :, 1) - decompressedImg(:, :, 1)))) / norm(double(vec(originalImg(:, :, 1))));
-  errG = norm(double(vec(originalImg(:, :, 2) - decompressedImg(:, :, 2)))) / norm(double(vec(originalImg(:, :, 2))));
-  errB = norm(double(vec(originalImg(:, :, 3) - decompressedImg(:, :, 3)))) / norm(double(vec(originalImg(:, :, 3))));
-  err = (errR + errG + errB)/3;
-  retval = err;
-  disp("err = "), disp(err);
+function retval = func1 (A)
+  p = size(A, 2);
+  B = ones(p, p, 3);
+  for i=0:(p-1)
+    for j=0:(p-1)
+      B(i + 1, j + 1, 1) = sin(j) * 127.5 + 127.5;
+      B(i + 1, j + 1, 2) = (((sin(j) + sin(p-1 - i))/2) * 127.5) + 127.5;
+      B(i + 1, j + 1, 3) = sin(p-1 - i) * 127.5 + 127.5;
+    endfor
+  endfor
+  retval = B;
+
 endfunction

@@ -185,11 +185,9 @@ function retval = decompress (compressedImg, method, k, h)
             endfor
           endfor
         endfor
-      endfor
-      
+      endfor  
     endif
     imwrite(uint8(D), "decompressed.png"); 
-    disp("oi")
     retval = D;
     
 

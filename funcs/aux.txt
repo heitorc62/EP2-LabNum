@@ -1,0 +1,71 @@
+#func2
+B = func2(A);
+imwrite(B, "original.png", 'Quality', 100);
+O = imread("original.png");
+compress(O, 1);
+C = imread("compressed.png");
+decompress(C, 1, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+decompress(C, 2, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+
+
+#func3
+B = func3(A);
+imwrite(B, "original.png", 'Quality', 100);
+O = imread("original.png");
+compress(O, 1);
+C = imread("compressed.png");
+decompress(C, 1, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+decompress(C, 2, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+
+#func4
+B = func4(A);
+imwrite(B, "original.png", 'Quality', 100);
+O = imread("original.png");
+compress(O, 1);
+C = imread("compressed.png");
+decompress(C, 1, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+decompress(C, 2, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+
+
+
+#func5
+B = func5(A);
+imwrite(B, "original.png", 'Quality', 100);
+O = imread("original.png");
+compress(O, 1);
+C = imread("compressed.png");
+decompress(C, 1, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+decompress(C, 2, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+
+
+
+
+
+#func6
+B = func6(A);
+imwrite(B, "original.png", 'Quality', 100);
+O = imread("original.png");
+compress(O, 1);
+C = imread("compressed.png");
+decompress(C, 1, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
+decompress(C, 2, 1, 1);
+D = imread("decompressed.png");
+calculateError(O, D);
