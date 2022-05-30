@@ -163,9 +163,9 @@ function retval = decompress (compressedImg, method, k, h)
             endfor
           endfor
           #B
-          C1 = B(:,:,1)*inv(A)*inv(A');
-          C2 = B(:,:,2)*inv(A)*inv(A');
-          C3 = B(:,:,3)*inv(A)*inv(A');
+          C1 = inv(A)*B(:,:,1)*inv(A');
+          C2 = inv(A)*B(:,:,2)*inv(A');
+          C3 = inv(A)*B(:,:,3)*inv(A');
           
           for l=0:k+1
             for q=0:k+1
