@@ -22,6 +22,11 @@
 ## Author: Heitor <heitor@pop-os>
 ## Created: 2022-05-29
 
-function retval = calculateError (input1, input2)
+function retval = calculateError (originalImg, decompressedImg)
+  errR = norm(vec(originalImg(:, :, 1) - decompressedImg(:, :, 1))) / norm(vec(originalImg(:, :, 1)));
+  errG = norm(vec(originalImg(:, :, 2) - decompressedImg(:, :, 2))) / norm(vec(originalImg(:, :, 2)));
+  errB = norm(vec(originalImg(:, :, 3) - decompressedImg(:, :, 3))) / norm(vec(originalImg(:, :, 3)));
+  err = (errR + errG + errB)/3;
+  retval = err;
 
 endfunction
