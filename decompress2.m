@@ -14,24 +14,14 @@
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {} {@var{retval} =} func1 (@var{input1}, @var{input2})
+## @deftypefn {} {@var{retval} =} decompress2 (@var{input1}, @var{input2})
 ##
 ## @seealso{}
 ## @end deftypefn
 
 ## Author: Heitor <heitor@pop-os>
-## Created: 2022-05-30
+## Created: 2022-05-31
 
-function retval = func1 (A)
-  p = size(A, 2);
-  B = ones(p, p, 3);
-  for i=0:(p-1)
-    for j=0:(p-1)
-      B(p-1 - i + 1, j + 1, 1) = sin(i) * 127.5 + 127.5;
-      B(p-1 - i + 1, j + 1, 2) = (((sin(j) + sin(i))/2) * 127.5) + 127.5;
-      B(p-1 - i + 1, j + 1, 3) = sin(i) * 127.5 + 127.5;
-    endfor
-  endfor
-  retval = B;
+function retval = decompress2 (input1, input2)
 
 endfunction

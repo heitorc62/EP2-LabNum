@@ -23,9 +23,23 @@
 ## Created: 2022-05-29
 
 function retval = calculateError (originalImg, decompressedImg)
-  errR = norm(double(vec(originalImg(:, :, 1) - decompressedImg(:, :, 1)))) / norm(double(vec(originalImg(:, :, 1))));
-  errG = norm(double(vec(originalImg(:, :, 2) - decompressedImg(:, :, 2)))) / norm(double(vec(originalImg(:, :, 2))));
-  errB = norm(double(vec(originalImg(:, :, 3) - decompressedImg(:, :, 3)))) / norm(double(vec(originalImg(:, :, 3))));
+  #errR = norm(double(vec(originalImg(:, :, 1) - decompressedImg(:, :, 1))), 2) / norm(double(vec(originalImg(:, :, 1))), 2);
+  #errG = norm(double(vec(originalImg(:, :, 2) - decompressedImg(:, :, 2))), 2) / norm(double(vec(originalImg(:, :, 2))), 2);
+  #errB = norm(double(vec(originalImg(:, :, 3) - decompressedImg(:, :, 3))), 2) / norm(double(vec(originalImg(:, :, 3))), 2);
+  originalImg = double(imread(originalImg));
+  decompressedImg = double(imread(decompressedImg));
+  origR = originalImg(:, :, 1);
+  origG = originalImg(:, :, 2);
+  origB = originalImg(:, :, 3);
+  decR = decompressedImg(:, :, 1);
+  decG = decompressedImg(:, :, 2);
+  decB = decompressedImg(:, :, 3);
+  errR = norm(double(origR - decR)) / norm(double(origR));
+  errG = norm(double(origG - decG)) / norm(double(origG));
+  errB = norm(double(origB - decB)) / norm(double(origB));
+  #errR = norm(originalImg(:, :, 1) - decompressedImg(:, :, 1))/norm(originalImg(:, :, 1));
+  #errG = norm(originalImg(:, :, 2) - decompressedImg(:, :, 2))/norm(originalImg(:, :, 2));
+  #errB = norm(originalImg(:, :, 3) - decompressedImg(:, :, 2))/norm(originalImg(:, :, 3));
   err = (errR + errG + errB)/3;
   retval = err;
   disp("err = "), disp(err);
