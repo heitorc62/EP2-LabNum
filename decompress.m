@@ -170,7 +170,8 @@ function retval = decompress (compressedImg, method, k, h)
           C1 = inv(A)*B(:,:,1)*inv(A');
           C2 = inv(A)*B(:,:,2)*inv(A');
           C3 = inv(A)*B(:,:,3)*inv(A');
-          
+          #disp("a matriz dos coeficientes é: ");
+          #C
           for l=0:k+1
             for q=0:k+1
               if D(I*(k + 1) + l + 1, J*(k + 1) + q + 1) == -1

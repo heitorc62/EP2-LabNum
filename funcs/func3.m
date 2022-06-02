@@ -35,5 +35,6 @@ function retval = func3 (A)
       B(i + 1, j + 1, 3) = 255/distMax*distI;
     endfor
   endfor
+  imwrite(uint8(B), "expLinear.png", 'Quality', 100);
   retval = B;
 endfunction

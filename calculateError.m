@@ -42,5 +42,6 @@ function retval = calculateError (originalImg, decompressedImg)
   #errB = norm(originalImg(:, :, 3) - decompressedImg(:, :, 2))/norm(originalImg(:, :, 3));
   err = (errR + errG + errB)/3;
   retval = err;
-  disp("err = "), disp(err);
+  disp("err = ");
+  fprintf("%10f\n", err);
 endfunction

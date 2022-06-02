@@ -22,15 +22,16 @@
 ## Author: Heitor <heitor@pop-os>
 ## Created: 2022-05-30
 
-function retval = func4 (A)
-  p = size(A, 2);
+function retval = func4 ()
+  p = 761;
   B = ones(p, p, 3);
   for i=0:(p-1)
     for j=0:(p-1)
-      B(i + 1, j + 1, 1) = 255/(p-1)*j ;
-      B(i + 1, j + 1, 2) = (255/(p-1)*j + 255/(p-1)*i)/2;
-      B(i + 1, j + 1, 3) = 255/(p-1)*i;
+      B(p-1 - i + 1, j + 1, 1) = (10**(2.4/p * j) + 10**(2.4/p * i))/2 + (j/p*255);
+      B(p-1 - i + 1, p-1 - j + 1, 2) = -1 * (((32/p * j) - 20)**2) + 255;
+      B(p-1 - i + 1, j + 1, 3) = 1;
     endfor
   endfor
+  imwrite(uint8(B), "exLinear.png", 'Quality', 100);
   retval = B;
 endfunction

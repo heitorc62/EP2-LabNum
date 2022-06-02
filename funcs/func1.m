@@ -21,17 +21,20 @@
 
 ## Author: Heitor <heitor@pop-os>
 ## Created: 2022-05-30
-
-function retval = func1 (A)
-  p = size(A, 2);
+function retval = func1 ()
+  p = 761;
   B = ones(p, p, 3);
+  k = 2.069e-3;
+  fMin = 0;
+  fMax = 1;
   for i=0:(p-1)
     for j=0:(p-1)
-      B(p-1 - i + 1, j + 1, 1) = sin(i) * 127.5 + 127.5;
-      B(p-1 - i + 1, j + 1, 2) = (((sin(j) + sin(i))/2) * 127.5) + 127.5;
-      B(p-1 - i + 1, j + 1, 3) = sin(i) * 127.5 + 127.5;
+      B(p-1 - i + 1, j + 1, 1) = floor(((sin(i * k) - fMin)/(fMax - fMin)) * 256);
+      B(p-1 - i + 1, j + 1, 2) = floor((((sin(j * k) + sin(i * k))/2 - fMin)/(fMax - fMin)) * 256);
+      B(p-1 - i + 1, j + 1, 3) = floor(((sin(i * k) - fMin)/(fMax - fMin)) * 256);
     endfor
   endfor
+  imwrite(uint8(B), "seno.png", 'Quality', 100);
   retval = B;
 
 endfunction
